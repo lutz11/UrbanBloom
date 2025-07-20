@@ -1,0 +1,17 @@
+[project]
+name = "example-1"
+version = "0.1.0"
+description = "example 1 for urban-bloom"
+authors = [
+    {name = "Steven Kotwal",email = "stevenkotwal@ufl.edu"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
