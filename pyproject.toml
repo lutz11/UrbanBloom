@@ -3,7 +3,9 @@ name = "example-1"
 version = "0.1.0"
 description = "example 1 for urban-bloom"
 authors = [
-    {name = "Steven Kotwal",email = "stevenkotwal@ufl.edu"}
+    {name = "Steven Kotwal",email = "stevenkotwal@ufl.edu"},
+    {name = "Nathan McTear",email = "nmctear@ufl.edu"},
+    {name = "Luke Kutz-Pears",email = "lukekutzpears@ufl.edu"}
 ]
 license = {text = "MIT"}
 readme = "README.md"

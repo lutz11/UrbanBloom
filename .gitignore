@@ -1,0 +1,83 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# VS Code
+.vscode/
+
+# JetBrains IDEs (IntelliJ, PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.cproject
+.settings/
+.loadpath
+
+# NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcodeproj
+*.xcuserdata
+DerivedData/
+build/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+*.un~
+.netrwhist
+tags
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# General IDE backups
+*.bak
+*.tmp
+*.temp
+
+# Python bytecode and virtual environments (optional, but common)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+env/
+ENV/
+
+# Node.js (optional, if using)
+node_modules/
+
+# Logs
+*.log
