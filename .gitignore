@@ -66,6 +66,7 @@ tags
 # Python bytecode and virtual environments (optional, but common)
 __pycache__/
 *.py[cod]
+*.pyc
 *.pyo
 *.pyd
 *.egg
@@ -81,3 +82,6 @@ node_modules/
 
 # Logs
 *.log
+
+# Project Files
+#output/
