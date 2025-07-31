@@ -15,7 +15,7 @@ to ensure the necessary dependencies are available.
 
 To run our examples you may visit the directory and run the following commands:
 ```bash
-poetry run python ./<example>.py
+poetry run python ./example/<example>.py
 ```
 
 population change by area
