@@ -4,8 +4,10 @@ import os
 # Static config
 income_file = "Metro Area Dataset - Income by Metro Area.csv"
 ascend = False  # Set to True for ascending sort
-input_path = os.path.join("datasets", income_file)
-output_path = os.path.join("output", "example1.xlsx")
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.dirname(current_dir)
+input_path = os.path.join(parent_dir, "datasets", "Metro Area Dataset - Income by Metro Area.csv")
+output_path = os.path.join(parent_dir, "output", "example1.xlsx")
 
 def main():
     # Load dataset
