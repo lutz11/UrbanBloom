@@ -10,13 +10,14 @@ class FileOps:
         parent_path = os.path.dirname(current_path)
         return parent_path
 
-    def get_output_path(self):
-        project_path = self.get_project_directory()
+    @staticmethod
+    def get_output_path():
+        project_path = FileOps.get_project_directory()
         target_path = os.path.join(project_path, "output")
         return target_path
 
     @staticmethod
-    def get_input_path(self):
-        project_path = self.get_project_directory()
+    def get_input_path():
+        project_path = FileOps.get_project_directory()
         target_path = os.path.join(project_path, "datasets")
         return target_path
