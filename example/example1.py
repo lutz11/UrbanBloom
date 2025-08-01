@@ -1,12 +1,12 @@
 import pandas as pd
 import os
 
-from lib.file_ops import get_output_path, get_input_path
+from lib.file_ops import FileOps
 
 # Static config
 income_file = "Metro Area Dataset - Income by Metro Area.csv"
-input_path = os.path.join(get_input_path(), income_file)
-output_path = os.path.join(get_output_path(), "example1.xlsx")
+input_path = os.path.join(FileOps.get_input_path(), income_file)
+output_path = os.path.join(FileOps.get_output_path(), "example1.xlsx")
 
 def main():
     # Load dataset
