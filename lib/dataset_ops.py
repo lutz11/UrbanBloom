@@ -111,8 +111,3 @@ class DatasetOps:
         df = df[required_original_cols].copy()
         df = df.rename(columns=column_rename_map)
         return df
-
-    @staticmethod
-    def add_column(df, newcolumn):
-        df.add_column(newcolumn)
-        return df
