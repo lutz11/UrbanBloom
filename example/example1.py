@@ -1,11 +1,12 @@
 import pandas as pd
 import os
 
+from lib.file_ops import FileOps
+
 # Static config
 income_file = "Metro Area Dataset - Income by Metro Area.csv"
-ascend = False  # Set to True for ascending sort
-input_path = os.path.join("datasets", income_file)
-output_path = os.path.join("output", "example1.xlsx")
+input_path = os.path.join(FileOps.get_input_path(), income_file)
+output_path = os.path.join(FileOps.get_output_path(), "example1.xlsx")
 
 def main():
     # Load dataset
