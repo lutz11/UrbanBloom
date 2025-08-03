@@ -84,3 +84,7 @@ node_modules/
 
 # Project Files
 output/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
