@@ -1,0 +1,46 @@
+import os
+
+class FileOps:
+
+    def __init__(self):
+        self.project_dir = os.path.dirname(os.path.dirname(__file__))
+
+    def get_dataset_path(self, csv_file):
+        return os.path.join(self.get_dataset_dir(), csv_file)
+
+    def file_exists_in_project(self, relative_file_path):
+        destination_path = os.path.join(self.project_dir, relative_file_path)
+        return os.path.exists(destination_path)
+
+    @staticmethod
+    def get_output_dir():
+        project_path = get_project_directory()
+        target_path = os.path.join(project_path, "output")
+        return target_path
+
+    @staticmethod
+    def get_dataset_dir():
+        project_path = get_project_directory()
+        target_path = os.path.join(project_path, "datasets")
+        return target_path
+
+    @staticmethod
+    def get_project_dir():
+        return get_project_directory()
+
+    @staticmethod
+    def open_file(absolute_file_path):
+        if not os.path.exists(absolute_file_path):
+            return None
+        with open(absolute_file_path, 'r') as file:
+            content = file.read()
+            if content is None:
+                print("Could not open file")
+                return None
+            return file
+
+# Helper function
+def get_project_directory():
+    current_path = os.path.dirname(__file__)
+    parent_path = os.path.dirname(current_path)
+    return parent_path
