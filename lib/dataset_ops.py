@@ -111,3 +111,14 @@ class DatasetOps:
         df = df[required_original_cols].copy()
         df = df.rename(columns=column_rename_map)
         return df
+
+    @staticmethod
+    def sort_by_column(df, column_name, ascending=False):
+        """
+        Sorts the given DataFrame by a specified column.
+        """
+        if column_name not in df.columns: 
+            raise ValueError(f"Column '{column_name}' not found. Available columns are: {df.columns.tolist()}")
+
+        print(f"Sorting by '{column_name}'")
+        return df.sort_values(by=column_name, ascending=ascending)
