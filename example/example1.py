@@ -2,6 +2,7 @@ import pandas as pd
 import os
 
 from lib.file_ops import FileOps
+from lib.dataset_ops import DatasetOps
 
 # Static config
 income_file = "Metro Area Dataset - Income by Metro Area.csv"
@@ -9,6 +10,9 @@ input_path = os.path.join(FileOps.get_input_path(), income_file)
 output_path = os.path.join(FileOps.get_output_path(), "example1.xlsx")
 
 def main():
+    # Precalculate UrbanBloomIndex
+    DatasetOps.generate_urban_bloom_index()
+
     # Load dataset
     df = pd.read_csv(input_path)
 
