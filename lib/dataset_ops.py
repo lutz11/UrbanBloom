@@ -99,7 +99,9 @@ class DatasetOps:
             df_rank_reset.to_csv(urban_bloom_index_path)
             return df_rank_reset
         else:
-            return None
+            file = fileoperator.get_dataset_path("Metro Area Dataset - MAP - Town to Urban Bloom Index.csv")
+            df = pd.read_csv(file)
+            return df
 
     @staticmethod
     def rename_columns_to_mapping(df, column_rename_map):
@@ -111,3 +113,27 @@ class DatasetOps:
         df = df[required_original_cols].copy()
         df = df.rename(columns=column_rename_map)
         return df
+
+    @staticmethod
+    def add_column(df, column_name):
+        # set file sheet to temp_df
+        file = FileOps.find_file_from_column(column_name)
+        temp_df = pd.read_csv(file)
+        # ensure the needed columns exist
+        expected = ["Geographic Area Name", column_name]
+        for col in expected:
+            if col not in temp_df.columns:
+                raise KeyError(f"Reference file {file} is missing required column: {col}")
+
+        # for each column if temp_df has column, add it to df
+        merged = df.merge(
+            temp_df[[column_name]], how="left", on="Geographic Area Name"
+        )
+        return merged
+
+    @staticmethod
+    def sort_df(df, column_name, ascending=True):
+        if ascending:
+            return df.sort_values(by=[column_name], ascending=True)
+        else:
+            return df.sort_values(by=[column_name], ascending=False)

@@ -1,5 +1,9 @@
 import os
 
+import pandas as pd
+from poetry.console.commands import self
+
+
 class FileOps:
 
     def __init__(self):
@@ -11,6 +15,10 @@ class FileOps:
     def file_exists_in_project(self, relative_file_path):
         destination_path = os.path.join(self.project_dir, relative_file_path)
         return os.path.exists(destination_path)
+
+    @staticmethod
+    def append_path(path, filename):
+        return os.path.join(path, filename)
 
     @staticmethod
     def get_output_dir():
@@ -39,8 +47,27 @@ class FileOps:
                 return None
             return file
 
+    @staticmethod
+    def find_file_from_column(column_name):
+        # iterate over files and check if file contains the column.
+        for file in os.listdir(get_dataset_directory()):
+            temp_df = pd.read_csv(file)
+            if temp_df[column_name] is not None:
+                return file
+        return None
+
 # Helper function
 def get_project_directory():
     current_path = os.path.dirname(__file__)
     parent_path = os.path.dirname(current_path)
     return parent_path
+
+def get_output_directory():
+    project_path = get_project_directory()
+    target_path = os.path.join(project_path, "output")
+    return target_path
+
+def get_dataset_directory():
+    project_path = get_project_directory()
+    target_path = os.path.join(project_path, "datasets")
+    return target_path
