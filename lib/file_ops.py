@@ -77,3 +77,13 @@ def get_dataset_directory():
     project_path = get_project_directory()
     target_path = os.path.join(project_path, "datasets")
     return target_path
+
+def sort_by_column(df, column_name, ascending=False):
+    """
+    Sorts the given DataFrame by a specified column.
+    """
+    if column_name not in df.columns: 
+        raise ValueError(f"Column '{column_name}' not found. Available columns are: {df.columns.tolist()}")
+
+    print(f"Sorting by '{column_name}'")
+    return df.sort_values(by=column_name, ascending=ascending)
