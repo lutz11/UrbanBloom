@@ -1,7 +1,10 @@
+import sys
+
 import pandas as pd
 import numpy as np
 import os
 
+from numpy.f2py.auxfuncs import throw_error
 from sklearn.preprocessing import MinMaxScaler
 from lib.file_ops import FileOps
 
@@ -36,7 +39,7 @@ class DatasetOps:
             WEIGHTS = {"median_income": 0.4, "high_earner_percent": 0.4, "log_population": 0.2}
 
             column_rename_map = {
-                "Geographic Area Name": "metro_area",
+                "Geographic Area Name": "Geographic Area Name",
                 "Population": "population",
                 "Households - Median income (dollars)": "median_income",
                 "Households - $150,000 to $199,999": "percent_150k_200k",
@@ -93,13 +96,15 @@ class DatasetOps:
             # Sort the DataFrame by the new index in descending order
             df_ranked = df.sort_values(by="urbanbloom_index", ascending=False)
 
-            df_sorted = df_ranked[["metro_area", "urbanbloom_index"]]
+            df_sorted = df_ranked[["Geographic Area Name", "urbanbloom_index"]]
             df_rank_reset = df_sorted.reset_index(drop=True)
 
             df_rank_reset.to_csv(urban_bloom_index_path)
             return df_rank_reset
         else:
-            return None
+            file = fileoperator.get_dataset_path("Metro Area Dataset - MAP - Town to Urban Bloom Index.csv")
+            df = pd.read_csv(file)
+            return df
 
     @staticmethod
     def rename_columns_to_mapping(df, column_rename_map):
@@ -113,12 +118,30 @@ class DatasetOps:
         return df
 
     @staticmethod
-    def sort_by_column(df, column_name, ascending=False):
-        """
-        Sorts the given DataFrame by a specified column.
-        """
-        if column_name not in df.columns: 
-            raise ValueError(f"Column '{column_name}' not found. Available columns are: {df.columns.tolist()}")
+    def add_column(df, column_name):
+        # set file sheet to temp_df
+        file = FileOps.find_file_from_column(column_name)
+        temp_df = pd.read_csv(file)
+        # ensure the needed columns exist
+        if column_name not in temp_df.columns:
+            print(f"[ERROR] '{column_name}' not in temp_df columns")
+            return None
 
-        print(f"Sorting by '{column_name}'")
-        return df.sort_values(by=column_name, ascending=ascending)
+        # for each column if temp_df has column, add it to df
+        reduced_temp_df = temp_df[["Geographic Area Name", column_name]]
+        merged = None
+        try:
+            merged = df.merge(
+                reduced_temp_df, how="left", on="Geographic Area Name"
+            )
+        except Exception:
+            None
+
+        return merged
+
+    @staticmethod
+    def sort_df(df, column_name, ascending=True):
+        if ascending:
+            return df.sort_values(by=[column_name], ascending=True)
+        else:
+            return df.sort_values(by=[column_name], ascending=False)
