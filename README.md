@@ -36,6 +36,11 @@ Once you have the notebook running, you can open the [urbanbloom_exploring_and_v
 ## Running The CLI
 To run the CLI, you can use the following supported command:
 ```bash
-poetry run urbanbloom --help
-poetry run urbanbloom --version
+poetry run urban --help
+poetry run urban --version
+poetry run urban --show [--ascending/--decending] [Options]
+poetry run urban --index [--ascending/--decending] [Options]
 ```
+Options:  
+The name of a column you wish to pass in as an argument.
+May be one or more columns, as long as they exist within the RowZero local files.
