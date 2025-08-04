@@ -18,6 +18,16 @@ To run our examples you may visit the directory and run the following commands:
 poetry run python ./example/<example>.py
 ```
 
-population change by area
-income by area
-figure out how to showcase
+You can also start a Juypter Notebook by running:
+```bash
+poetry run jupyter notebook
+```
+
+Once you have the notebook running, you can open the [urbanbloom_exploring_and_visualization.ipynb](urbanbloom_exploring_and_visualization.ipynb) file to explore the data and visualizations of our UrbanBloom Potential Index.
+
+## Running The CLI
+To run the CLI, you can use the following supported command:
+```bash
+poetry run urbanbloom --help
+poetry run urbanbloom --version
+```
