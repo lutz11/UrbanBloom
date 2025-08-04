@@ -1,3 +1,5 @@
+import sys
+
 import click
 from click import option
 import pandas as pd
@@ -18,10 +20,8 @@ def cli():
 @cli.command()
 @click.option('--descend', 'sort_order', flag_value='false', help='Sort in descending order.')
 @click.option('--ascend', 'sort_order', flag_value='true', default=True, help='Sort in ascending order (default).')
-@click.argument('column1')
-@click.argument('column2')
-@click.argument('column3')
-def index(sort_order, column1, column2, column3):
+@click.argument('columns', nargs=-1, required=True)
+def index(sort_order, columns):
     """
     Displays a ranked index of metropolitan areas.
     """
@@ -32,17 +32,16 @@ def index(sort_order, column1, column2, column3):
     fileoperator = FileOps()
 
     UBdf = datasetoperator.generate_urban_bloom_index()
-    output_UBdf = UBdf[["Geographic Area Name", "urbanbloom_rank"]]
+    reduced_UBdf = UBdf[["Geographic Area Name", "urbanbloom_index"]]
 
-    options = [column1, column2, column3]
+    for column in columns:
+        output_UBdf = datasetoperator.add_column(reduced_UBdf, column_name=column)
+        reduced_UBdf = output_UBdf
 
-    for option in options:
-        output_UBdf = datasetoperator.add_column(UBdf, column_name=option)
-
-    sorted_UBdf = datasetoperator.sort_df(output_UBdf, ascending=sort_order)
+    sorted_UBdf = datasetoperator.sort_df(output_UBdf, columns[0], ascending=sort_order)
 
     output_path = fileoperator.get_output_dir()
-    output_file = fileoperator.append_path(output_path, "output.csv")
+    output_file = fileoperator.append_path(output_path, "output.xlsx")
     sorted_UBdf.to_excel(output_file, index=False, engine='openpyxl')
 
 
@@ -50,31 +49,42 @@ def index(sort_order, column1, column2, column3):
 @cli.command()
 @click.option('--descend', 'sort_order', flag_value='false', help='Sort in descending order.')
 @click.option('--ascend', 'sort_order', flag_value='true', default=True, help='Sort in ascending order (default).')
-@click.argument('column1')
-@click.argument('column2')
-@click.argument('column3')
-def show(sort_order, column1, column2, column3):
+@click.argument('columns', nargs=-1, required=True)
+def show(sort_order, columns):
     """
     Displays a ranked index of metropolitan areas.
     """
-    message = f"Indexing Sorting in {sort_order} order."
+    message = f"Showing {columns} Sorted by {columns[0]}."
     click.echo(message)
 
     datasetoperator = DatasetOps()
     fileoperator = FileOps()
 
-    options = [column1, column2, column3]
 
-    file = fileoperator.find_file_from_column(options[0])
+    file = fileoperator.find_file_from_column(columns[0])
+    if file is None:
+        print(f"No file found with column name {columns[0]}")
+        sys.exit()
     df = pd.read_csv(file)
-    df = df[["Geographic Area Name", options[0]]]
+    init_df = df[["Geographic Area Name", columns[0]]]
+    init = False
+    for column in columns:
+        if not init:
+            init = True
+            continue
+        else:
+            column_added_df = datasetoperator.add_column(init_df, column_name=column)
+            init_df = column_added_df
 
-    for option in options:
-        df = datasetoperator.addColumn(df, column_name=option, ascending=sort_order)
+    if column_added_df is None:
+        print(f"No file found with the column name {column}")
+        sys.exit()
+
+    sorted_df = datasetoperator.sort_df(column_added_df, columns[0], ascending=sort_order)
 
     output_path = fileoperator.get_output_dir()
-    output_file = fileoperator.append_path(output_path, "output.csv")
-    df.to_excel(output_file, index=False, engine='openpyxl')
+    output_file = fileoperator.append_path(output_path, "output.xlsx")
+    sorted_df.to_excel(output_file, index=False, engine='openpyxl')
 
 
 if __name__ == "__main__":

@@ -1,7 +1,6 @@
 import os
 
 import pandas as pd
-from poetry.console.commands import self
 
 
 class FileOps:
@@ -51,9 +50,16 @@ class FileOps:
     def find_file_from_column(column_name):
         # iterate over files and check if file contains the column.
         for file in os.listdir(get_dataset_directory()):
-            temp_df = pd.read_csv(file)
-            if temp_df[column_name] is not None:
-                return file
+            filepath = os.path.join(get_dataset_directory(), file)
+            temp_df = pd.read_csv(filepath)
+            try:
+                if column_name in temp_df.columns:
+                    print(f"Found {column_name} in {filepath}")
+                    return filepath
+            except KeyError:
+                print(f"Could not find {column_name} in {filepath}")
+                continue
+
         return None
 
 # Helper function

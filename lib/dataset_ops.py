@@ -1,7 +1,10 @@
+import sys
+
 import pandas as pd
 import numpy as np
 import os
 
+from numpy.f2py.auxfuncs import throw_error
 from sklearn.preprocessing import MinMaxScaler
 from lib.file_ops import FileOps
 
@@ -36,7 +39,7 @@ class DatasetOps:
             WEIGHTS = {"median_income": 0.4, "high_earner_percent": 0.4, "log_population": 0.2}
 
             column_rename_map = {
-                "Geographic Area Name": "metro_area",
+                "Geographic Area Name": "Geographic Area Name",
                 "Population": "population",
                 "Households - Median income (dollars)": "median_income",
                 "Households - $150,000 to $199,999": "percent_150k_200k",
@@ -93,7 +96,7 @@ class DatasetOps:
             # Sort the DataFrame by the new index in descending order
             df_ranked = df.sort_values(by="urbanbloom_index", ascending=False)
 
-            df_sorted = df_ranked[["metro_area", "urbanbloom_index"]]
+            df_sorted = df_ranked[["Geographic Area Name", "urbanbloom_index"]]
             df_rank_reset = df_sorted.reset_index(drop=True)
 
             df_rank_reset.to_csv(urban_bloom_index_path)
@@ -120,15 +123,20 @@ class DatasetOps:
         file = FileOps.find_file_from_column(column_name)
         temp_df = pd.read_csv(file)
         # ensure the needed columns exist
-        expected = ["Geographic Area Name", column_name]
-        for col in expected:
-            if col not in temp_df.columns:
-                raise KeyError(f"Reference file {file} is missing required column: {col}")
+        if column_name not in temp_df.columns:
+            print(f"[ERROR] '{column_name}' not in temp_df columns")
+            return None
 
         # for each column if temp_df has column, add it to df
-        merged = df.merge(
-            temp_df[[column_name]], how="left", on="Geographic Area Name"
-        )
+        reduced_temp_df = temp_df[["Geographic Area Name", column_name]]
+        merged = None
+        try:
+            merged = df.merge(
+                reduced_temp_df, how="left", on="Geographic Area Name"
+            )
+        except Exception:
+            None
+
         return merged
 
     @staticmethod
